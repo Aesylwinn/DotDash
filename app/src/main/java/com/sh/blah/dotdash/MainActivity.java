@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void SendButtonClick (View v){
 
-        transmitter.transmit(morseText.toString());
+        transmitter.transmit(morseText.getText().toString());
     }
 
     @Override
