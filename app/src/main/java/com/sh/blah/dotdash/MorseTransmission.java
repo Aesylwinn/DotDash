@@ -16,11 +16,14 @@ public class MorseTransmission {
 
     /**
      * Pulses the camera flashlight
-     * @param camera the camera object
      * @param length the duration in milliseconds
      */
-    public void pulse(Camera camera, int length)
+    public void pulse(int length)
     {
+        Camera camera = Camera.open();
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        camera.setParameters(parameters);
         camera.startPreview();
         try {
             Thread.sleep(length);
@@ -28,19 +31,12 @@ public class MorseTransmission {
             e.printStackTrace();
         }
         camera.stopPreview();
+        camera.release();
     }
 
     public void transmit(String message)
     {
-        Camera camera = Camera.open();
-        Camera.Parameters parameters = camera.getParameters();
-
-        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-        camera.setParameters(parameters);
-
-        pulse(camera, 1000);
-
-        camera.release();
+        pulse(1000);
     }
 
     public String recieve(Camera camera)
