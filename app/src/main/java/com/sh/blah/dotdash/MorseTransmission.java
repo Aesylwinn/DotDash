@@ -66,17 +66,177 @@ public class MorseTransmission {
 
     public void transmit(String message)
     {
-        pulseDot();
-        pulseDot();
-        pulseDot();
+        String morseMes =  code(message);
+        int index;
+        for(index = 0; index < morseMes.length(); index++)
+        {
+            char c = morseMes.charAt(index);
+            if(c == '*'){
+                pulseDot();
+            }else if(c == '-'){
+                pulseDash();
+            }else if(c == ' '){
+                pulseSpace();
+            } else {
+                pulseWord();
+            }
+        }
+    }
 
-        pulseDash();
-        pulseDash();
-        pulseDash();
+    private String code(String mes){
+        int i;
+        String out = "";
+        for (i = 0; i < mes.length(); i++)
+        {
+            char c = mes.charAt(i);
+            switch(c){
+                case 'a':
+                case 'A':
+                    out += "*-";
+                    break;
+                case 'b':
+                case 'B':
+                    out += "-***";
+                    break;
+                case 'c':
+                case 'C':
+                    out += "-*-*";
+                    break;
+                case 'd':
+                case 'D':
+                    out += "-**";
+                    break;
+                case 'e':
+                case 'E':
+                    out += "*";
+                    break;
+                case 'f':
+                case 'F':
+                    out += "**-*";
+                    break;
+                case 'g':
+                case 'G':
+                    out += "--*";
+                    break;
+                case 'h':
+                case 'H':
+                    out += "****";
+                    break;
+                case 'i':
+                case 'I':
+                    out += "**";
+                    break;
+                case 'j':
+                case 'J':
+                    out += "*---";
+                    break;
+                case 'k':
+                case 'K':
+                    out += "-*-";
+                    break;
+                case 'l':
+                case 'L':
+                    out += "*-**";
+                    break;
+                case 'm':
+                case 'M':
+                    out += "--";
+                    break;
+                case 'n':
+                case 'N':
+                    out += "-*";
+                    break;
+                case 'o':
+                case 'O':
+                    out += "---";
+                    break;
+                case 'p':
+                case 'P':
+                    out += "*--*";
+                    break;
+                case 'q':
+                case 'Q':
+                    out += "--*-";
+                    break;
+                case 'r':
+                case 'R':
+                    out += "*-*";
+                    break;
+                case 's':
+                case 'S':
+                    out += "***";
+                    break;
+                case 't':
+                case 'T':
+                    out += "-";
+                    break;
+                case 'u':
+                case 'U':
+                    out += "**-";
+                    break;
+                case 'v':
+                case 'V':
+                    out += "***-";
+                    break;
+                case 'w':
+                case 'W':
+                    out += "*--";
+                    break;
+                case 'x':
+                case 'X':
+                    out += "-**-";
+                    break;
+                case 'y':
+                case 'Y':
+                    out += "-*--";
+                    break;
+                case 'z':
+                case 'Z':
+                    out += "--**";
+                    break;
+                case '0':
+                    out += "-----";
+                    break;
+                case '1':
+                    out += "*----";
+                    break;
+                case '2':
+                    out += "**---";
+                    break;
+                case '3':
+                    out += "***--";
+                    break;
+                case '4':
+                    out += "****-";
+                    break;
+                case '5':
+                    out += "*****";
+                    break;
+                case '6':
+                    out += "-****";
+                    break;
+                case '7':
+                    out += "--***";
+                    break;
+                case '8':
+                    out += "---**";
+                    break;
+                case '9':
+                    out += "----*";
+                    break;
+                case ' ':
+                    out += "/";
+                    break;
+                default :
+                    break;
 
-        pulseDot();
-        pulseDot();
-        pulseDot();
+            }
+            out += " ";
+
+
+        }
+
+        return out;
     }
 
     public String recieve(Camera camera)
