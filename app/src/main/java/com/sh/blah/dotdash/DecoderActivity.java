@@ -3,19 +3,13 @@ package com.sh.blah.dotdash;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Size;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 import java.io.IOException;
-import java.util.List;
 
 public class DecoderActivity extends Activity implements Camera.PreviewCallback {
 
