@@ -1,88 +1,92 @@
 package com.sh.blah.dotdash;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.provider.MediaStore;
+import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.util.Log;
+import android.util.Size;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
-public class DecoderActivity extends AppCompatActivity implements View.OnTouchListener {
-    sView v;
-    Thread t = null;
-    SurfaceHolder sHolder;
-    Boolean safeToRun = false;
+import java.io.IOException;
+import java.util.List;
+
+public class DecoderActivity extends Activity {
+
+    private Camera mCamera = null;
+    private CameraView mCameraView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        v = new sView(this);
-        v.setOnTouchListener(this);
-        setContentView(v);
+        setContentView(R.layout.activity_decoder2);
 
+        try{
+            mCamera = Camera.open();
+        } catch (Exception e){
+            Log.d("ERROR", "Failed to get camera: " + e.getMessage());
+        }
+
+        if(mCamera != null) {
+            mCameraView = new CameraView(this, mCamera);//create a SurfaceView to show camera data
+            FrameLayout camera_view = (FrameLayout)findViewById(R.id.camera_view);
+            camera_view.addView(mCameraView);//add the SurfaceView to the layout
+        }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        v.pause();
-    }
+    public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
+        private SurfaceHolder mHolder;
+        private Camera mCamera;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        v.resume();
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return false;
-    }
-
-    public class sView extends SurfaceView implements Runnable {
-
-        public sView (Context context){
+        public CameraView(Context context, Camera camera){
             super(context);
-            sHolder = getHolder();
+
+            mCamera = camera;
+            mCamera.setDisplayOrientation(90);
+            mHolder = getHolder();
+            mHolder.addCallback(this);
+            mHolder.setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
         }
 
-        public void run() {
-            while (safeToRun == true){
-                if(!sHolder.getSurface().isValid()) {
-                    continue;
-                }
-                Canvas c = sHolder.lockCanvas();
-                c.drawARGB(250,150,150,10);
-                sHolder.unlockCanvasAndPost(c);
-            }
-
-        }
-
-
-        public void pause() {
-            safeToRun = false;
-            while(true){
-                try{
-                    t.join();
-                } catch (InterruptedException e){
-                    e.printStackTrace();
-                }
+        @Override
+        public void surfaceCreated(SurfaceHolder surfaceHolder) {
+            try{
+                mCamera.setPreviewDisplay(surfaceHolder);
+                mCamera.startPreview();
+            } catch (IOException e) {
+                Log.d("ERROR", "Camera error on surfaceCreated " + e.getMessage());
             }
         }
 
-        public void resume() {
-            safeToRun = true;
-            t = new Thread(this);
-            t.start();
+        @Override
+        public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
+            if(mHolder.getSurface() == null)//check if the surface is ready to receive camera data
+                return;
+
+            try{
+                mCamera.stopPreview();
+            } catch (Exception e){
+                //this will happen when you are trying the camera if it's not running
+            }
+
+            try{
+                mCamera.setPreviewDisplay(mHolder);
+                mCamera.startPreview();
+            } catch (IOException e) {
+                Log.d("ERROR", "Camera error on surfaceChanged " + e.getMessage());
+            }
         }
 
+        @Override
+        public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+            mCamera.stopPreview();
+            mCamera.release();
+        }
     }
 }
