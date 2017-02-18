@@ -13,6 +13,7 @@ public class MorseTransmission {
     private final int DotLength = 500;
     private final int DashLength = 1000;
     private final int SpaceLength = 500;
+    private final int WordLength = 500;
     private final int IntervalLength = 333;
 
     public MorseTransmission(){
@@ -64,9 +65,18 @@ public class MorseTransmission {
         }
     }
 
+    private void pulseWord()
+    {
+        try {
+            Thread.sleep(WordLength);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void transmit(String message)
     {
-        String morseMes =  code(message);
+        String morseMes = code(message);
         int index;
         for(index = 0; index < morseMes.length(); index++)
         {
