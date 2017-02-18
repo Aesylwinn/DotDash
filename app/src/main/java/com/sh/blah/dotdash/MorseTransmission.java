@@ -10,11 +10,11 @@ import java.util.Map;
 
 public class MorseTransmission {
 
-    private final int DotLength = 500;
-    private final int DashLength = 1000;
+    private final int DotLength = 100;
+    private final int DashLength = 400;
     private final int SpaceLength = 500;
     private final int WordLength = 500;
-    private final int IntervalLength = 333;
+    private final int IntervalLength = 100;
 
     public MorseTransmission(){
     }
