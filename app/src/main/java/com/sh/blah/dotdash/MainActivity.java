@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Read Button Click
     public void ReadButtonClick(View v) {
-        Intent i = new Intent(this, MorseReader.class);
+        Intent i = new Intent(this, DecoderActivity.class);
         startActivity(i);
     }
 

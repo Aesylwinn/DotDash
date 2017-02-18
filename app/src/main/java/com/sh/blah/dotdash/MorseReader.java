@@ -16,14 +16,10 @@ public class MorseReader extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_morse_reader);
         sView = (SurfaceView)findViewById(R.id.surfaceView);
+        StartCamera();
     }
 
-    @Override
-    protected void  onResume(){
-        super.onResume();
-        StartCamera(this);
-    }
-    void StartCamera(Activity act){
+    void StartCamera(){
         Camera cam = Camera.open();
         cam.setDisplayOrientation(0);
         try {
