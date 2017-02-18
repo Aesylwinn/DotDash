@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         transmitter = new MorseTransmission();
     }
+    //HELLO FOOLS
 
     public void SendButtonClick (View v){
 
