@@ -25,13 +25,25 @@
         android:textAlignment="center" />
 
     <Button
+        android:text="Read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:id="@+id/readButton"
+        android:elevation="8dp"
+        android:onClick="ReadButtonClick"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/sendButton"
+        android:layout_alignStart="@+id/sendButton" />
+
+    <Button
         android:text="Send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="99dp"
+        android:layout_marginBottom="27dp"
         android:id="@+id/sendButton"
         android:elevation="8dp"
-        android:onClick="SendButtonClick" />
+        android:onClick="SendButtonClick"
+        android:layout_above="@+id/readButton"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

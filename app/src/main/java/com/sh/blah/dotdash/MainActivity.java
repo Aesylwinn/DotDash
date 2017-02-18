@@ -1,6 +1,7 @@
 package com.sh.blah.dotdash;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -23,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         morseText = (EditText) findViewById(R.id.morseTextField);
 
-        // Initialization
-        transmitter = new MorseTransmission();
+
 
         // Request permissions for Android 6
         int camPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -33,11 +33,20 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA }, 1 );
         }
     }
+
+
     //HELLO FOOLS
-
     public void SendButtonClick (View v){
+        transmitter = new MorseTransmission();
+        transmitter.transmit(morseText.getText().toString());
+    }
 
-        transmitter.transmit(morseText.toString());
+
+    //Read Button Click
+    public void ReadButtonClick (View v){
+        setContentView(R.layout.activity_read);
+        MorseRead read = new MorseRead();
+        read.StartCamera();
     }
 
     @Override

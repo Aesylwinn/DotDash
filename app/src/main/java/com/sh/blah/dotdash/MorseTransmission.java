@@ -246,9 +246,4 @@ public class MorseTransmission {
 
         return out;
     }
-
-    public String recieve(Camera camera)
-    {
-        return "";
-    }
 }
