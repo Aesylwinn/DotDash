@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import java.io.IOException;
 import java.util.List;
 
-public class DecoderActivity extends Activity {
+public class DecoderActivity extends Activity implements Camera.PreviewCallback {
 
     private Camera mCamera = null;
     private CameraView mCameraView = null;
@@ -38,6 +38,11 @@ public class DecoderActivity extends Activity {
             FrameLayout camera_view = (FrameLayout)findViewById(R.id.camera_view);
             camera_view.addView(mCameraView);//add the SurfaceView to the layout
         }
+    }
+
+    @Override
+    public void onPreviewFrame(byte[] data, Camera camera) {
+        Log.d("data", Integer.toString(data.length));
     }
 
     public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
@@ -70,6 +75,7 @@ public class DecoderActivity extends Activity {
                 return;
 
             try{
+                mCamera.setPreviewCallback(null);
                 mCamera.stopPreview();
             } catch (Exception e){
                 //this will happen when you are trying the camera if it's not running
@@ -77,6 +83,7 @@ public class DecoderActivity extends Activity {
 
             try{
                 mCamera.setPreviewDisplay(mHolder);
+                mCamera.setPreviewCallback((Camera.PreviewCallback) getContext());
                 mCamera.startPreview();
             } catch (IOException e) {
                 Log.d("ERROR", "Camera error on surfaceChanged " + e.getMessage());
