@@ -13,6 +13,7 @@ import android.widget.Chronometer;
 import android.widget.FrameLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Timer;
 
@@ -21,13 +22,19 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
     final int ExaminedWidth = 500 * 3;
     final int ExaminedHeight = 500 * 3;
 
+    final long SpecSignal = 1500;
+
     private Camera mCamera = null;
     private CameraView mCameraView = null;
 
     long prev = 0;
-    boolean state = true;
-    int[] oldValues = new int[5];
+    boolean state = false;
+    boolean running = false;
 
+    double[] oldValues = new double[20];
+    int rollingOffset = 0;
+
+    ArrayList<Long> timings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +55,21 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        prev = System.currentTimeMillis();
+    }
+
+    @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
 
         long now = System.currentTimeMillis();
-        long diff = now - prev;
+        long diff = now > prev ? (now - prev) : (prev - now);
 
         Camera.Size size = camera.getParameters().getPreviewSize();
 
@@ -77,9 +95,30 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         }
         brightness /= count;
 
-        if (state == true)
-        {
+        double rollingAverage = 0;
+        for (double x : oldValues)
+            rollingAverage += x;
+        rollingAverage /= oldValues.length;
 
+        oldValues[rollingOffset++ % oldValues.length] = brightness;
+
+        boolean high = (brightness > rollingAverage);
+        if (high != state)
+        {
+            if (!running && high && diff > SpecSignal)
+                running = true;
+            else if (running && diff > SpecSignal) {
+                running = false;
+                Log.d("timings", timings.toString());
+            }
+            else if (state && timings.size() % 2 == 0)
+                timings.add(diff);
+            else if (!state && timings.size() % 2 == 1)
+                timings.add(diff);
+
+            state = high;
+            prev = now;
+            Log.d("time", Double.toString(diff));
         }
         //Log.d("bright", Double.toString(brightness));
     }

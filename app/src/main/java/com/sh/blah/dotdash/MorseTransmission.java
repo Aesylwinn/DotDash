@@ -15,10 +15,16 @@ public class MorseTransmission {
     private final int SpaceLength = 500;
     private final int WordLength = 500;
     private final int IntervalLength = 100;
+    private final int SpecialLength = 1500;
 
     public MorseTransmission(){
     }
 
+    private void waitDur(long length)
+    {
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < length);
+    }
 
     /**
      * Pulses the camera flashlight
@@ -31,19 +37,11 @@ public class MorseTransmission {
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
         camera.setParameters(parameters);
         camera.startPreview();
-        try {
-            Thread.sleep(length);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitDur(length);
         camera.stopPreview();
         camera.release();
 
-        try {
-            Thread.sleep(IntervalLength);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitDur(IntervalLength);
     }
 
     private void pulseDot()
@@ -58,20 +56,17 @@ public class MorseTransmission {
 
     private void pulseSpace()
     {
-        try {
-            Thread.sleep(SpaceLength);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitDur(SpaceLength);
     }
 
     private void pulseWord()
     {
-        try {
-            Thread.sleep(WordLength);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitDur(WordLength);
+    }
+
+    private void pulseStart()
+    {
+        waitDur(SpecialLength);
     }
 
     public void transmit(String message)
