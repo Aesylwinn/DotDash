@@ -5,12 +5,16 @@ import android.content.Context;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Timer;
 
 public class DecoderActivity extends Activity implements Camera.PreviewCallback {
 
@@ -19,6 +23,11 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
     private Camera mCamera = null;
     private CameraView mCameraView = null;
+
+    long prev = 0;
+    boolean state = true;
+    int[] oldValues = new int[5];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,10 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
+
+        long now = System.currentTimeMillis();
+        long diff = now - prev;
+
         Camera.Size size = camera.getParameters().getPreviewSize();
 
         int scalar = 3; // YUV - nv21, 3 bytes
@@ -63,7 +76,12 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
             }
         }
         brightness /= count;
-        Log.d("bright", Double.toString(brightness));
+
+        if (state == true)
+        {
+
+        }
+        //Log.d("bright", Double.toString(brightness));
     }
 
     public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
