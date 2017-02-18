@@ -232,8 +232,6 @@ public class MorseTransmission {
 
             }
             out += " ";
-
-
         }
 
         return out;
