@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         morseText = (EditText) findViewById(R.id.morseTextField);
+
+        transmitter = new MorseTransmission();
     }
 
     public void SendButtonClick (View v){

@@ -39,6 +39,8 @@ public class MorseTransmission {
         camera.setParameters(parameters);
 
         pulse(camera, 1000);
+
+        camera.release();
     }
 
     public String recieve(Camera camera)
