@@ -93,6 +93,162 @@ public class MorseTransmission {
         }
     }
 
+    /*public String time_To_Morse(int [] )
+    {
+    MANI's FUNCTION
+    }*/
+
+    public static String decrypt(String input)//Function takes in string: (ie: "*- -* / ***") and turns it into original form: ("an s")
+    {
+        String decoded = "";
+        String temp = "";
+        int j;
+        for(j = 0; j < input.length(); j++)
+        {
+            char b = input.charAt(j);
+
+            if(b == ' ')
+            {
+                decoded += morToAlph(temp);
+                temp = "";
+            }
+            else if((input.length() - 1) == j)
+            {
+                temp += b;
+                decoded += morToAlph(temp);
+            }
+            else if(b == '/')
+            {
+                decoded += ' ';
+            }
+            else
+            {
+                temp += b;
+            }
+
+        }
+        return decoded;
+    }
+
+    public static String morToAlph(String morse)//Function is called by decrypt to individually make characters
+    {
+        String alphabet = "";
+        switch(morse)
+        {
+            case "*-":
+                alphabet += 'a';
+                break;
+            case "-***":
+                alphabet += 'b';
+                break;
+            case "-*-*":
+                alphabet += 'c';
+                break;
+            case "-**":
+                alphabet += 'd';
+                break;
+            case "*":
+                alphabet += 'e';
+                break;
+            case "**-*":
+                alphabet += 'f';
+                break;
+            case "--*":
+                alphabet += 'g';
+                break;
+            case "****":
+                alphabet += 'h';
+                break;
+            case "**":
+                alphabet += 'i';
+                break;
+            case "*---":
+                alphabet += 'j';
+                break;
+            case "-*-":
+                alphabet += 'k';
+                break;
+            case "*-**":
+                alphabet += 'l';
+                break;
+            case "--":
+                alphabet += 'm';
+                break;
+            case "-*":
+                alphabet += 'n';
+                break;
+            case "---":
+                alphabet += 'o';
+                break;
+            case "*--*":
+                alphabet += 'p';
+                break;
+            case "--*-":
+                alphabet += 'q';
+                break;
+            case "*-*":
+                alphabet += 'r';
+                break;
+            case "***":
+                alphabet += 's';
+                break;
+            case "-":
+                alphabet += 't';
+                break;
+            case "**-":
+                alphabet += 'u';
+                break;
+            case "***-":
+                alphabet += 'v';
+                break;
+            case "*--":
+                alphabet += 'w';
+                break;
+            case "-**-":
+                alphabet += 'x';
+                break;
+            case "-*--":
+                alphabet += 'y';
+                break;
+            case "--**":
+                alphabet += 'z';
+                break;
+            case "-----":
+                alphabet += '0';
+                break;
+            case "*----":
+                alphabet += '1';
+                break;
+            case "**---":
+                alphabet += '2';
+                break;
+            case "***--":
+                alphabet += '3';
+                break;
+            case "****-":
+                alphabet += '4';
+                break;
+            case "*****":
+                alphabet += '5';
+                break;
+            case "-****":
+                alphabet += '6';
+                break;
+            case "--***":
+                alphabet += '7';
+                break;
+            case "---**":
+                alphabet += '8';
+                break;
+            case "----*":
+                alphabet += '9';
+                break;
+            default:
+                break;
+        }
+        return alphabet;
+    }
+
     private String code(String mes){
         int i;
         String out = "";
