@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA }, 1 );
         }
     }
-
-
     //HELLO FOOLS
     public void SendButtonClick (View v){
         transmitter = new MorseTransmission();
