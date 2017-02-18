@@ -13,9 +13,9 @@ public class MorseRead {
     }
 
     void StartCamera(){
-
         Camera cam = Camera.open();
         cam.startPreview();
+        cam.release();
     }
 
 }
