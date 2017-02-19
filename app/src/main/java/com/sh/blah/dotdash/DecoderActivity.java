@@ -71,6 +71,14 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         timings = new ArrayList<>();
     }
 
+    protected void onStop(View view)
+    {
+        Log.d("st", "pressed");
+        Intent i = new Intent(this, MainActivity.class);
+        i.putExtra(Intent.EXTRA_RETURN_RESULT, timings);
+        startActivity(i);
+    }
+
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
 
@@ -117,9 +125,6 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
                 mCamera.release();
                 running = false;
                 Log.d("timings", timings.toString());
-                Intent i = new Intent(this, MainActivity.class);
-                i.putExtra(Intent.EXTRA_RETURN_RESULT, timings);
-                startActivity(i);
             }
             else if (state && timings.size() % 2 == 0)
                 timings.add(diff);
