@@ -12,9 +12,9 @@ public class MorseTransmission {
 
     private final int DotLength = 100;
     private final int DashLength = 400;
-    private final int SpaceLength = 500;
-    private final int WordLength = 500;
-    private final int IntervalLength = 100;
+    private final int SpaceLength = 600;
+    private final int WordLength = 800;
+    private final int IntervalLength = 25;
     private final int SpecialLength = 1500;
 
     public MorseTransmission(){
@@ -32,12 +32,13 @@ public class MorseTransmission {
      */
     private void pulse(int length)
     {
+        final long Lag = 50;
         Camera camera = Camera.open();
         Camera.Parameters parameters = camera.getParameters();
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
         camera.setParameters(parameters);
         camera.startPreview();
-        waitDur(length);
+        waitDur(length - Lag);
         camera.stopPreview();
         camera.release();
 
@@ -97,7 +98,7 @@ public class MorseTransmission {
     MANI's FUNCTION
     }*/
 
-    public static String decrypt(String input)//Function takes in string: (ie: "*- -* / ***") and turns it into original form: ("an s")
+    public String decrypt(String input)//Function takes in string: (ie: "*- -* / ***") and turns it into original form: ("an s")
     {
         String decoded = "";
         String temp = "";

@@ -2,6 +2,7 @@ package com.sh.blah.dotdash;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
@@ -65,6 +66,9 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
     protected void onResume() {
         super.onResume();
         prev = System.currentTimeMillis();
+        state = false;
+        running = false;
+        timings = new ArrayList<>();
     }
 
     public void zoomIn(View v){
@@ -120,14 +124,20 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         oldValues[rollingOffset++ % oldValues.length] = brightness;
 
-        boolean high = (brightness > rollingAverage);
+        int minDelta = 8;
+        boolean high = (brightness > rollingAverage + minDelta);
         if (high != state)
         {
             if (!running && high && diff > SpecSignal)
                 running = true;
             else if (running && diff > SpecSignal) {
                 running = false;
+
                 Log.d("timings", timings.toString());
+
+                Intent i = new Intent(this, MainActivity.class);
+                i.putExtra(Intent.EXTRA_RETURN_RESULT, timings.toArray());
+                startActivity(i);
             }
             else if (state && timings.size() % 2 == 0)
                 timings.add(diff);
@@ -136,7 +146,6 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
             state = high;
             prev = now;
-            Log.d("time", Double.toString(diff));
         }
         //Log.d("bright", Double.toString(brightness));
     }
@@ -195,8 +204,12 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         @Override
         public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-            mCamera.stopPreview();
-            mCamera.release();
+            try {
+                mCamera.stopPreview();
+                mCamera.release();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }
