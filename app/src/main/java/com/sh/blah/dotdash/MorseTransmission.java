@@ -3,6 +3,7 @@ package com.sh.blah.dotdash;
 import android.hardware.Camera;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by aesylwinn on 2/18/17.
@@ -102,11 +103,11 @@ public class MorseTransmission {
     {
         String decoded = new String();
         String temp = new String();
+        char b;
         int j;
         for(j = 0; j < input.length(); j++)
         {
-            char b = input.charAt(j);
-
+            b  = input.charAt(j);
             if(b == ' ')
             {
                 decoded += morToAlph(temp);
@@ -154,7 +155,7 @@ public class MorseTransmission {
                 if (b[i] > MaxWord)
                     continue;
                 else if (b[i] > MidSpaceWord)
-                    out += '/';
+                    out += " / ";
                 else if (b[i] > MinSpace)
                     out += ' ';
             }

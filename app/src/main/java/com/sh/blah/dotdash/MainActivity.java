@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
 
             Log.d("dur", durations.toString());
             String code = transmitter.time_Morse(durations); // Translate function goes here
-            //Log.d("code", code);
+            Log.d("code", code);
             String result = transmitter.decrypt(code);//new String("**** **"));
             Log.d("result", result);
 
