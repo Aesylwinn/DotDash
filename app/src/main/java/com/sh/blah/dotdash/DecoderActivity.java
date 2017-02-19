@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 
@@ -63,6 +65,22 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
     protected void onResume() {
         super.onResume();
         prev = System.currentTimeMillis();
+    }
+
+    public void zoomIn(View v){
+        if(mCamera.getParameters().isZoomSupported() &&
+                mCamera.getParameters().getZoom()< mCamera.getParameters().getMaxZoom()){
+            int currZoom = mCamera.getParameters().getZoom();
+            mCamera.startSmoothZoom(5+currZoom);
+        }
+    }
+
+    public void zoomOut(View v){
+        if(mCamera.getParameters().isZoomSupported() &&
+                mCamera.getParameters().getZoom()> 0){
+            int currZoom = mCamera.getParameters().getZoom();
+            mCamera.startSmoothZoom(-5+currZoom);
+        }
     }
 
     @Override
