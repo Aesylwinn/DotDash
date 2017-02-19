@@ -9,8 +9,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
@@ -23,10 +26,18 @@ public class MainActivity extends Activity {
 
         transmitter = new MorseTransmission();
 
-        if (getIntent().hasExtra(Intent.EXTRA_RETURN_RESULT)) {
-            double[] durations = getIntent().getExtras().getDoubleArray(Intent.EXTRA_RETURN_RESULT);
-            String code = time_Morse(durations); // Translate function goes here
+        if (DecoderActivity.timings.size() > 0){//getIntent().hasExtra(Intent.EXTRA_RETURN_RESULT)) {
+            //getIntent().getExtras().getLongArray(Intent.EXTRA_RETURN_RESULT);
+
+            long[] durations = new long[DecoderActivity.timings.size()];
+            for (int x = 0; x < DecoderActivity.timings.size(); ++x)
+                durations[x] = DecoderActivity.timings.get(x);
+
+            Log.d("dur", durations.toString());
+            String code = transmitter.time_Morse(durations); // Translate function goes here
+            Log.d("code", code);
             String result = transmitter.decrypt(code);
+            Log.d("result", result);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("You recieved a message!");
@@ -62,26 +73,6 @@ public class MainActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
         super.onRequestPermissionsResult(reqCode, permissions, results);
-    }
-    public String time_Morse(double b[]) {
-        String out = "";
-        for (int i = 0; i < b.length; i++) {
-            if (b[i] >= 1000) {
-                i++;
-                continue;
-            }
-            if (b[i] < 450) {
-                if (b[i] < 250)
-                    out += '*';
-                else
-                    out += '-';
-            } else if ((b[i] >= 450) && (b[i] < 700)) {
-                out += ' ';
-            } else {
-                out += '/';
-            }
-        }
-        return out;
     }
 }
 

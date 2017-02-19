@@ -28,38 +28,16 @@
 
     ]]>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <FrameLayout
+        android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_weight="1">
 
-        <FrameLayout
-            android:id="@+id/camera_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="1">
-
-        </FrameLayout>
-
-        <Button
-            android:text="Zoom In"
-            android:layout_width="match_parent"
-            android:id="@+id/button8"
-            android:layout_weight="1"
-            android:layout_height="200dp"
-            android:onClick="zoomIn" />
-
-        <Button
-            android:text="Zoom Out"
-            android:layout_width="match_parent"
-            android:id="@+id/button7"
-            android:layout_weight="1"
-            android:layout_height="200dp"
-            android:onClick="zoomOut" />
-    </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>
 

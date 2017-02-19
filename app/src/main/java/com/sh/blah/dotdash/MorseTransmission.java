@@ -12,9 +12,9 @@ public class MorseTransmission {
 
     private final int DotLength = 100;
     private final int DashLength = 400;
-    private final int SpaceLength = 600;
-    private final int WordLength = 800;
-    private final int IntervalLength = 25;
+    private final int SpaceLength = 300;
+    private final int WordLength = 500;
+    private final int IntervalLength = 100;
     private final int SpecialLength = 1500;
 
     public MorseTransmission(){
@@ -128,6 +128,39 @@ public class MorseTransmission {
 
         }
         return decoded;
+    }
+
+    public String time_Morse(long b[]) {
+
+        final int MidDotDash = (DotLength + DashLength) / 2;
+        final int MaxDash = 2 * DashLength;
+        final int MinSpace = SpaceLength / 2;
+        final int MidSpaceWord = (SpaceLength + WordLength) / 2;
+        final int MaxWord = 2 * WordLength;
+
+        String out = new String();
+
+        for (int i = 0; i < b.length; ++i)
+        {
+            if (i%2 == 0) {
+                if (b[i] < MidDotDash)
+                    out += '*';
+                else if (b[i] < MaxDash)
+                    out += '-';
+                else ++i;
+            }
+            else
+            {
+                if (b[i] > MaxWord)
+                    continue;
+                else if (b[i] > MidSpaceWord)
+                    out += '/';
+                else if (b[i] > MinSpace)
+                    out += ' ';
+            }
+        }
+
+        return out;
     }
 
     public static String morToAlph(String morse)//Function is called by decrypt to individually make characters

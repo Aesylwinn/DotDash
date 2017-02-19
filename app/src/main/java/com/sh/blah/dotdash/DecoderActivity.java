@@ -37,7 +37,7 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
     double[] oldValues = new double[20];
     int rollingOffset = 0;
 
-    ArrayList<Long> timings = new ArrayList<>();
+    public static ArrayList<Long> timings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +71,11 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         timings = new ArrayList<>();
     }
 
-    public void zoomIn(View v){
-        if(mCamera.getParameters().isZoomSupported() &&
-                mCamera.getParameters().getZoom()< mCamera.getParameters().getMaxZoom()){
-            int currZoom = mCamera.getParameters().getZoom();
-            mCamera.startSmoothZoom(5+currZoom);
-        }
-    }
-
-    public void zoomOut(View v){
-        if(mCamera.getParameters().isZoomSupported() &&
-                mCamera.getParameters().getZoom()> 0){
-            int currZoom = mCamera.getParameters().getZoom();
-            mCamera.startSmoothZoom(-5+currZoom);
-        }
-    }
-
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
 
         long now = System.currentTimeMillis();
-        long diff = now > prev ? (now - prev) : (prev - now);
+        long diff = now - prev;
 
         Camera.Size size = camera.getParameters().getPreviewSize();
 
@@ -126,15 +110,18 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         int minDelta = 8;
         boolean high = (brightness > rollingAverage + minDelta);
-        if (!running && high && diff > SpecSignal)
+        if (!running && high && diff > SpecSignal) {
             running = true;
-        else if (running && diff > SpecSignal) {
+            prev = now;
+        }
+        else if (running && !high && diff > SpecSignal) {
             running = false;
+            prev = now;
 
             Log.d("timings", timings.toString());
 
             Intent i = new Intent(this, MainActivity.class);
-            i.putExtra(Intent.EXTRA_RETURN_RESULT, timings.toArray());
+            i.putExtra("timings", timings.toArray());
             startActivity(i);
         }
 
