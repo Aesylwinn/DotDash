@@ -27,8 +27,8 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
     final long SpecSignal = 1500;
 
-    private Camera mCamera = null;
-    private CameraView mCameraView = null;
+    private Camera mCamera;
+    private CameraView mCameraView;
 
     long prev = 0;
     boolean state = false;
@@ -113,7 +113,8 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         {
             if (!running && high && diff > SpecSignal)
                 running = true;
-            else if (running && diff > SpecSignal) {
+            else if (running && diff > SpecSignal-200) {
+                mCamera.release();
                 running = false;
                 Log.d("timings", timings.toString());
                 Intent i = new Intent(this, MainActivity.class);
