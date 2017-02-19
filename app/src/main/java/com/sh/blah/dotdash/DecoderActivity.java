@@ -126,20 +126,21 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         int minDelta = 8;
         boolean high = (brightness > rollingAverage + minDelta);
+        if (!running && high && diff > SpecSignal)
+            running = true;
+        else if (running && diff > SpecSignal) {
+            running = false;
+
+            Log.d("timings", timings.toString());
+
+            Intent i = new Intent(this, MainActivity.class);
+            i.putExtra(Intent.EXTRA_RETURN_RESULT, timings.toArray());
+            startActivity(i);
+        }
+
         if (high != state)
         {
-            if (!running && high && diff > SpecSignal)
-                running = true;
-            else if (running && diff > SpecSignal) {
-                running = false;
-
-                Log.d("timings", timings.toString());
-
-                Intent i = new Intent(this, MainActivity.class);
-                i.putExtra(Intent.EXTRA_RETURN_RESULT, timings.toArray());
-                startActivity(i);
-            }
-            else if (state && timings.size() % 2 == 0)
+            if (state && timings.size() % 2 == 0)
                 timings.add(diff);
             else if (!state && timings.size() % 2 == 1)
                 timings.add(diff);

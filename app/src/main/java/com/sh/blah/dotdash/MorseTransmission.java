@@ -67,7 +67,7 @@ public class MorseTransmission {
 
     private void pulseStart()
     {
-        waitDur(SpecialLength);
+        pulse(SpecialLength);
     }
 
     public void transmit(String message)
