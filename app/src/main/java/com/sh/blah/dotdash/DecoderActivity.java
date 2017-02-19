@@ -176,7 +176,7 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
             try{
                 mCamera.setPreviewDisplay(surfaceHolder);
                 mCamera.startPreview();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.d("ERROR", "Camera error on surfaceCreated " + e.getMessage());
             }
         }
@@ -197,7 +197,7 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
                 mCamera.setPreviewDisplay(mHolder);
                 mCamera.setPreviewCallback((Camera.PreviewCallback) getContext());
                 mCamera.startPreview();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.d("ERROR", "Camera error on surfaceChanged " + e.getMessage());
             }
         }
