@@ -73,8 +73,6 @@ public class MorseTransmission {
 
     public void transmit(String message)
     {
-        pulseStart();
-
         String morseMes = code(message);
         int index;
         for(index = 0; index < morseMes.length(); index++)
@@ -90,8 +88,6 @@ public class MorseTransmission {
                 pulseWord();
             }
         }
-
-        pulseStart();
     }
 
     /*public String time_To_Morse(int [] )

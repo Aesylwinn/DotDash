@@ -118,13 +118,7 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         boolean high = (brightness > rollingAverage);
         if (high != state)
         {
-            if (!running && high && diff > SpecSignal)
-                running = true;
-            else if (running && diff > SpecSignal-200) {
-                running = false;
-                Log.d("timings", timings.toString());
-            }
-            else if (state && timings.size() % 2 == 0)
+            if (state && timings.size() % 2 == 0)
                 timings.add(diff);
             else if (!state && timings.size() % 2 == 1)
                 timings.add(diff);
@@ -151,18 +145,24 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         void setCamera(Camera cam)
         {
-            mCamera = cam;
-            if (mCamera != null)
+
+            if (cam != null)
             {
-                mCamera.setDisplayOrientation(90);
-                Camera.Parameters parameters = mCamera.getParameters();
+                cam.setDisplayOrientation(90);
+                Camera.Parameters parameters = cam.getParameters();
                 parameters.setPreviewFormat(ImageFormat.NV21);
                 if (parameters.isAutoWhiteBalanceLockSupported())
                     parameters.setAutoWhiteBalanceLock(true);
                 if (parameters.isAutoExposureLockSupported())
                     parameters.setAutoExposureLock(true);
-                mCamera.setParameters(parameters);
+                cam.setParameters(parameters);
             }
+            else if (mCamera != null) {
+                mCamera.setPreviewCallback(null);
+                mCamera.stopPreview();
+            }
+
+            mCamera = cam;
         }
 
         @Override
