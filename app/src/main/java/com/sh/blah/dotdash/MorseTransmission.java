@@ -32,7 +32,7 @@ public class MorseTransmission {
      */
     private void pulse(int length)
     {
-        final long Lag = 50;
+        final long Lag = 0;
         Camera camera = Camera.open();
         Camera.Parameters parameters = camera.getParameters();
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -100,8 +100,8 @@ public class MorseTransmission {
 
     public String decrypt(String input)//Function takes in string: (ie: "*- -* / ***") and turns it into original form: ("an s")
     {
-        String decoded = "";
-        String temp = "";
+        String decoded = new String();
+        String temp = new String();
         int j;
         for(j = 0; j < input.length(); j++)
         {
@@ -134,9 +134,9 @@ public class MorseTransmission {
 
         final int MidDotDash = (DotLength + DashLength) / 2;
         final int MaxDash = 2 * DashLength;
-        final int MinSpace = SpaceLength / 2;
-        final int MidSpaceWord = (SpaceLength + WordLength) / 2;
-        final int MaxWord = 2 * WordLength;
+        final int MinSpace = SpaceLength - 50;
+        final int MidSpaceWord = WordLength - 50;
+        final int MaxWord = WordLength + 100;
 
         String out = new String();
 

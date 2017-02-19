@@ -75,7 +75,7 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
     public void onPreviewFrame(byte[] data, Camera camera) {
 
         long now = System.currentTimeMillis();
-        long diff = now - prev;
+        long diff = now > prev ? (now - prev) : (prev - now);
 
         Camera.Size size = camera.getParameters().getPreviewSize();
 
@@ -108,32 +108,26 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         oldValues[rollingOffset++ % oldValues.length] = brightness;
 
-        int minDelta = 8;
-        boolean high = (brightness > rollingAverage + minDelta);
-        if (!running && high && diff > SpecSignal) {
-            running = true;
-            prev = now;
-        }
-        else if (running && !high && diff > SpecSignal) {
-            running = false;
-            prev = now;
-
-            Log.d("timings", timings.toString());
-
-            Intent i = new Intent(this, MainActivity.class);
-            i.putExtra("timings", timings.toArray());
-            startActivity(i);
-        }
-
+        boolean high = (brightness > rollingAverage);
         if (high != state)
         {
-            if (state && timings.size() % 2 == 0)
+            if (!running && high && diff > SpecSignal)
+                running = true;
+            else if (running && diff > SpecSignal) {
+                running = false;
+                Log.d("timings", timings.toString());
+                Intent i = new Intent(this, MainActivity.class);
+                i.putExtra(Intent.EXTRA_RETURN_RESULT, timings);
+                startActivity(i);
+            }
+            else if (state && timings.size() % 2 == 0)
                 timings.add(diff);
             else if (!state && timings.size() % 2 == 1)
                 timings.add(diff);
 
             state = high;
             prev = now;
+            Log.d("time", Double.toString(diff));
         }
         //Log.d("bright", Double.toString(brightness));
     }

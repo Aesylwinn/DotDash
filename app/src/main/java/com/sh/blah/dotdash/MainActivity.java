@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         transmitter = new MorseTransmission();
 
         if (DecoderActivity.timings.size() > 0){//getIntent().hasExtra(Intent.EXTRA_RETURN_RESULT)) {
-            //getIntent().getExtras().getLongArray(Intent.EXTRA_RETURN_RESULT);
+            getIntent().getExtras().getLongArray(Intent.EXTRA_RETURN_RESULT);
 
             long[] durations = new long[DecoderActivity.timings.size()];
             for (int x = 0; x < DecoderActivity.timings.size(); ++x)
@@ -35,8 +35,8 @@ public class MainActivity extends Activity {
 
             Log.d("dur", durations.toString());
             String code = transmitter.time_Morse(durations); // Translate function goes here
-            Log.d("code", code);
-            String result = transmitter.decrypt(code);
+            //Log.d("code", code);
+            String result = transmitter.decrypt(code);//new String("**** **"));
             Log.d("result", result);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
