@@ -106,7 +106,8 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         oldValues[rollingOffset++ % oldValues.length] = brightness;
 
-        boolean high = (brightness > rollingAverage);
+        int minDelta = 8;
+        boolean high = (brightness > rollingAverage + minDelta);
         if (high != state)
         {
             if (!running && high && diff > SpecSignal)
@@ -114,11 +115,11 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
             else if (running && diff > SpecSignal) {
                 running = false;
 
+                Log.d("timings", timings.toString());
+
                 Intent i = new Intent(this, MainActivity.class);
                 i.putExtra(Intent.EXTRA_RETURN_RESULT, timings.toArray());
                 startActivity(i);
-
-                timings = null;
             }
             else if (state && timings.size() % 2 == 0)
                 timings.add(diff);
@@ -185,8 +186,12 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
         @Override
         public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-            mCamera.stopPreview();
-            mCamera.release();
+            try {
+                mCamera.stopPreview();
+                mCamera.release();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }

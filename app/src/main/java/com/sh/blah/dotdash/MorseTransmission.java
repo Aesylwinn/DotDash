@@ -32,12 +32,13 @@ public class MorseTransmission {
      */
     private void pulse(int length)
     {
+        final long Lag = 50;
         Camera camera = Camera.open();
         Camera.Parameters parameters = camera.getParameters();
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
         camera.setParameters(parameters);
         camera.startPreview();
-        waitDur(length);
+        waitDur(length - Lag);
         camera.stopPreview();
         camera.release();
 

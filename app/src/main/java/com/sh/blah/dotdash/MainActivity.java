@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
             builder.setMessage(result);
 
             AlertDialog dialog = builder.create();
+            dialog.show();
         }
 
         // Load layout and retrieve elements
