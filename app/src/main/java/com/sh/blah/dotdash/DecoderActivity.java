@@ -44,21 +44,17 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decoder2);
 
-        try{
-            mCamera = Camera.open();
-        } catch (Exception e){
-            Log.d("ERROR", "Failed to get camera: " + e.getMessage());
-        }
-
-        if(mCamera != null) {
-            mCameraView = new CameraView(this, mCamera);//create a SurfaceView to show camera data
-            FrameLayout camera_view = (FrameLayout)findViewById(R.id.camera_view);
-            camera_view.addView(mCameraView);//add the SurfaceView to the layout
-        }
+        mCameraView = new CameraView(this, null);//create a SurfaceView to show camera data
+        FrameLayout camera_view = (FrameLayout)findViewById(R.id.camera_view);
+        camera_view.addView(mCameraView);//add the SurfaceView to the layout
     }
 
     @Override
     protected void onPause() {
+        mCameraView.setCamera(null);
+        if (mCamera != null)
+            mCamera.release();
+
         super.onPause();
     }
 
@@ -69,6 +65,9 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         state = false;
         running = false;
         timings = new ArrayList<>();
+
+        mCamera = Camera.open();
+        mCameraView.setCamera(mCamera);
     }
 
     protected void onStop(View view)
@@ -122,7 +121,6 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
             if (!running && high && diff > SpecSignal)
                 running = true;
             else if (running && diff > SpecSignal-200) {
-                mCamera.release();
                 running = false;
                 Log.d("timings", timings.toString());
             }
@@ -145,25 +143,35 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         public CameraView(Context context, Camera camera){
             super(context);
 
-            mCamera = camera;
-            mCamera.setDisplayOrientation(90);
-            Camera.Parameters parameters = camera.getParameters();
-            parameters.setPreviewFormat(ImageFormat.NV21);
-            if (parameters.isAutoWhiteBalanceLockSupported())
-                parameters.setAutoWhiteBalanceLock(true);
-            if (parameters.isAutoExposureLockSupported())
-                parameters.setAutoExposureLock(true);
-            camera.setParameters(parameters);
+            setCamera(camera);
             mHolder = getHolder();
             mHolder.addCallback(this);
             mHolder.setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
         }
 
+        void setCamera(Camera cam)
+        {
+            mCamera = cam;
+            if (mCamera != null)
+            {
+                mCamera.setDisplayOrientation(90);
+                Camera.Parameters parameters = mCamera.getParameters();
+                parameters.setPreviewFormat(ImageFormat.NV21);
+                if (parameters.isAutoWhiteBalanceLockSupported())
+                    parameters.setAutoWhiteBalanceLock(true);
+                if (parameters.isAutoExposureLockSupported())
+                    parameters.setAutoExposureLock(true);
+                mCamera.setParameters(parameters);
+            }
+        }
+
         @Override
         public void surfaceCreated(SurfaceHolder surfaceHolder) {
             try{
-                mCamera.setPreviewDisplay(surfaceHolder);
-                mCamera.startPreview();
+                if (mCamera != null) {
+                    mCamera.setPreviewDisplay(surfaceHolder);
+                    mCamera.startPreview();
+                }
             } catch (Exception e) {
                 Log.d("ERROR", "Camera error on surfaceCreated " + e.getMessage());
             }
@@ -175,16 +183,20 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
                 return;
 
             try{
-                mCamera.setPreviewCallback(null);
-                mCamera.stopPreview();
+                if (mCamera != null) {
+                    mCamera.setPreviewCallback(null);
+                    mCamera.stopPreview();
+                }
             } catch (Exception e){
                 //this will happen when you are trying the camera if it's not running
             }
 
             try{
-                mCamera.setPreviewDisplay(mHolder);
-                mCamera.setPreviewCallback((Camera.PreviewCallback) getContext());
-                mCamera.startPreview();
+                if (mCamera != null) {
+                    mCamera.setPreviewDisplay(mHolder);
+                    mCamera.setPreviewCallback((Camera.PreviewCallback) getContext());
+                    mCamera.startPreview();
+                }
             } catch (Exception e) {
                 Log.d("ERROR", "Camera error on surfaceChanged " + e.getMessage());
             }
@@ -193,8 +205,9 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
         @Override
         public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
             try {
-                mCamera.stopPreview();
-                mCamera.release();
+                if (mCamera != null) {
+                    mCamera.stopPreview();
+                }
             } catch (Exception e){
                 e.printStackTrace();
             }
