@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
         if (getIntent().hasExtra(Intent.EXTRA_RETURN_RESULT)) {
             double[] durations = getIntent().getExtras().getDoubleArray(Intent.EXTRA_RETURN_RESULT);
-            String code = new String("*- *** ***"); // Translate function goes here
+            String code = time_Morse(durations); // Translate function goes here
             String result = transmitter.decrypt(code);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -62,6 +62,26 @@ public class MainActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
         super.onRequestPermissionsResult(reqCode, permissions, results);
+    }
+    public String time_Morse(double b[]) {
+        String out = "";
+        for (int i = 0; i < b.length; i++) {
+            if (b[i] >= 1000) {
+                i++;
+                continue;
+            }
+            if (b[i] < 450) {
+                if (b[i] < 250)
+                    out += '*';
+                else
+                    out += '-';
+            } else if ((b[i] >= 450) && (b[i] < 700)) {
+                out += ' ';
+            } else {
+                out += '/';
+            }
+        }
+        return out;
     }
 }
 
