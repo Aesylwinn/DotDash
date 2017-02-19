@@ -12,9 +12,9 @@ public class MorseTransmission {
 
     private final int DotLength = 100;
     private final int DashLength = 400;
-    private final int SpaceLength = 500;
-    private final int WordLength = 500;
-    private final int IntervalLength = 100;
+    private final int SpaceLength = 600;
+    private final int WordLength = 800;
+    private final int IntervalLength = 25;
     private final int SpecialLength = 1500;
 
     public MorseTransmission(){
@@ -97,7 +97,7 @@ public class MorseTransmission {
     MANI's FUNCTION
     }*/
 
-    public static String decrypt(String input)//Function takes in string: (ie: "*- -* / ***") and turns it into original form: ("an s")
+    public String decrypt(String input)//Function takes in string: (ie: "*- -* / ***") and turns it into original form: ("an s")
     {
         String decoded = "";
         String temp = "";

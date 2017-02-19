@@ -2,6 +2,7 @@ package com.sh.blah.dotdash;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -63,6 +64,9 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
     protected void onResume() {
         super.onResume();
         prev = System.currentTimeMillis();
+        state = false;
+        running = false;
+        timings = new ArrayList<>();
     }
 
     @Override
@@ -109,7 +113,12 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
                 running = true;
             else if (running && diff > SpecSignal) {
                 running = false;
-                Log.d("timings", timings.toString());
+
+                Intent i = new Intent(this, MainActivity.class);
+                i.putExtra(Intent.EXTRA_RETURN_RESULT, timings.toArray());
+                startActivity(i);
+
+                timings = null;
             }
             else if (state && timings.size() % 2 == 0)
                 timings.add(diff);
@@ -118,7 +127,6 @@ public class DecoderActivity extends Activity implements Camera.PreviewCallback 
 
             state = high;
             prev = now;
-            Log.d("time", Double.toString(diff));
         }
         //Log.d("bright", Double.toString(brightness));
     }

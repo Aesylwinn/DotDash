@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,20 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        transmitter = new MorseTransmission();
+
+        if (getIntent().hasExtra(Intent.EXTRA_RETURN_RESULT)) {
+            double[] durations = getIntent().getExtras().getDoubleArray(Intent.EXTRA_RETURN_RESULT);
+            String code = new String("*- *** ***"); // Translate function goes here
+            String result = transmitter.decrypt(code);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("You recieved a message!");
+            builder.setMessage(result);
+
+            AlertDialog dialog = builder.create();
+        }
 
         // Load layout and retrieve elements
         setContentView(R.layout.activity_main);
@@ -34,7 +49,6 @@ public class MainActivity extends Activity {
 
     //HELLO FOOLS
     public void SendButtonClick(View v) {
-        transmitter = new MorseTransmission();
         transmitter.transmit(morseText.getText().toString());
     }
 
